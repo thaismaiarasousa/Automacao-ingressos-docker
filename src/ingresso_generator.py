@@ -33,7 +33,7 @@ def generate_ingresso_code(tipo_ingresso, contadores):
 def overlay_code_on_image(ingresso_code):
     # Lógica para sobrepor o código gerado na imagem padrão.
     # Carrega a imagem padrão (substitua 'caminho_da_imagem_padrao' pelo caminho real).
-    base_image = Image.open('C:/Users/thais/Desktop/PROJETOS-REAIS-PROG/Automacao-de-ingressos-master/images/ingresso_padrao/ingresso_padrao.jpg')
+    base_image = Image.open('./images/ingresso_padrao/ingresso_padrao.jpg')
 
     # Cria um objeto ImageDraw para desenhar na imagem.
     draw = ImageDraw.Draw(base_image)
@@ -52,7 +52,7 @@ def overlay_code_on_image(ingresso_code):
     draw.text(position, ingresso_code, font=font, fill=text_color)
 
     # Escolhe o diretório onde deseja salvar a imagem resultante.
-    output_directory = 'C:/Users/thais/Desktop/PROJETOS-REAIS-PROG/Automacao-de-ingressos-master/images/ingressos_editados'
+    output_directory = './images/ingressos_editados'
 
     # Garante que o diretório existe; se não existir, cria.
     os.makedirs(output_directory, exist_ok=True)

@@ -10,23 +10,26 @@ from ingresso_generator import overlay_code_on_image, generate_ingresso_code
 from email_sender import send_email
 from google_sheets import read_google_sheets, authorize_google_sheets
 from decouple import Config, Csv, RepositoryEnv
+from dotenv import load_dotenv
+
+load_dotenv()
 
 # If modifying these scopes, delete the file token.json.
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 # Escopos OAuth 2.0 necessários para ler dados do Google Sheets.
 
 # Cria uma instância do Config e configura o caminho para o arquivo .env
-config = Config(RepositoryEnv('.env'))
+# config = Config(RepositoryEnv('../.env'))
 
 # Lê as variáveis de ambiente do arquivo .env
-SPREADSHEET_ID = config('SPREADSHEET_ID', default='')
-SHEET_NAME = config('SHEET_NAME', default='')
+SPREADSHEET_ID = os.getenv('SPREADSHEET_ID')
+SHEET_NAME = os.getenv('SHEET_NAME')
 
 # Configurações do servidor de e-mail
-EMAIL_SMTP_SERVER = config('EMAIL_SMTP_SERVER', default='')
-EMAIL_SMTP_PORT = config('EMAIL_SMTP_PORT', default=587, cast=int)
-EMAIL_USERNAME = config('EMAIL_USERNAME', default='')
-EMAIL_PASSWORD = config('EMAIL_PASSWORD', default='')
+EMAIL_SMTP_SERVER = os.getenv('EMAIL_SMTP_SERVER')
+EMAIL_SMTP_PORT = os.getenv('EMAIL_SMTP_PORT')
+EMAIL_USERNAME = os.getenv('EMAIL_USERNAME')
+EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 
 # Dicionário padrão para armazenar os contadores.
 DEFAULT_CONTADORES = {'SOCIAL': 0, 'INTEIRA': 0, 'MEIA': 0}
@@ -68,11 +71,11 @@ def main():
     range_name = f'{SHEET_NAME}!B:E'
 
     # Lê o número da última linha processada a partir do arquivo de configuração.
-    last_processed_row_file = 'data/last_processed_row.json'
+    last_processed_row_file = './data/last_processed_row.json'
     last_processed_row = read_last_processed_row(last_processed_row_file)
 
     # Lê os contadores a partir do arquivo ou utiliza o padrão se o arquivo não existir.
-    contadores_file = 'data/contadores.json'
+    contadores_file = './data/contadores.json'
     contadores = read_contadores(contadores_file, DEFAULT_CONTADORES)
 
     # Lê os dados do Google Sheets.
@@ -122,8 +125,8 @@ def main():
 
 if __name__ == '__main__':
     # Adicione essas linhas para debug
-    SPREADSHEET_ID = config('SPREADSHEET_ID', default='')
-    SHEET_NAME = config('SHEET_NAME', default='')
+    SPREADSHEET_ID =  os.getenv('SPREADSHEET_ID')
+    SHEET_NAME =  os.getenv('SHEET_NAME')
     
     print(f"SHEET_NAME: {SHEET_NAME}")
 

@@ -22,4 +22,13 @@ Execute o script principal:
 python main.py
 
 
+# Docker
+
+```
+    docker build -t automacao_ingressos .
+```
+
+```
+    docker run automacao_ingressos
+```
 

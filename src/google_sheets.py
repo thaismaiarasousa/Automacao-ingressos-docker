@@ -2,29 +2,25 @@
 import os
 import json
 from decouple import config
+
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
+from google.oauth2.gdch_credentials import ServiceAccountCredentials
+from google.oauth2 import service_account
+
 
 SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
 def authorize_google_sheets():
     creds = None
-    if os.path.exists('token.json'):
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
+    with open('./service_account.json') as f:
+        creds_dict = json.load(f)
     
-    if not creds or not creds.valid:
-        if creds and creds.expired and creds.refresh_token:
-            creds.refresh(Request())
-        else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                config('CLIENT_SECRET_FILE', default=''), SCOPES)
-            creds = flow.run_local_server(port=0)
-        
-        with open('token.json', 'w') as token:
-            token.write(creds.to_json())
-
+    if creds_dict:
+        creds = service_account.Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
+    
     return build('sheets', 'v4', credentials=creds)
 
 def read_google_sheets(service, spreadsheet_id, range_name):
