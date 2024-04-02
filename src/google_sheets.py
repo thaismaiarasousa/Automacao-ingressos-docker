@@ -14,10 +14,9 @@ SCOPES = ['https://www.googleapis.com/auth/spreadsheets.readonly']
 
 def authorize_google_sheets():
     creds = None
-    with open('./service_account.json') as f:
-        creds_dict = json.load(f)
-    
-    if creds_dict:
+    #with open('./service_account.json') as f:
+    #    creds_dict = json.load(f)
+    if 'GOOGLE_APPLICATION_CREDENTIALS' in os.environ:
         creds = service_account.Credentials.from_service_account_file(os.environ['GOOGLE_APPLICATION_CREDENTIALS'], scopes=SCOPES)
     
     return build('sheets', 'v4', credentials=creds)
