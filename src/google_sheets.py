@@ -18,7 +18,7 @@ def authorize_google_sheets():
         creds_dict = json.load(f)
     
     if creds_dict:
-        creds = service_account.Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
+        creds = service_account.Credentials.from_service_account_file(os.environ['GOOGLE_APPLICATION_CREDENTIALS'], scopes=SCOPES)
     
     return build('sheets', 'v4', credentials=creds)
 
