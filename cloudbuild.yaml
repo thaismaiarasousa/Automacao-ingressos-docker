@@ -1,0 +1,10 @@
+steps:
+  
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'us-central1-docker.pkg.dev/gerenc-pdm/automacao-docker/automacao-docker:${SHORT_SHA}','.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'us-central1-docker.pkg.dev/gerenc-pdm/automacao-docker/automacao-docker:${SHORT_SHA}']
+
+images: 
+  - us-central1-docker.pkg.dev/gerenc-pdm/automacao-docker/automacao-docker:${SHORT_SHA}
