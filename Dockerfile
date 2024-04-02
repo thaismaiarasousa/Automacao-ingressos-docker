@@ -18,7 +18,7 @@ RUN mkdir /app/data
 
 COPY ./data /app/data
 
-COPY ./service_account.json /app/service_account.json
+# COPY ./service_account.json /app/service_account.json
 
 # Configurações de acesso ao Sheets
 #ENV SENHA_DO_EMAIL=""
