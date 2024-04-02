@@ -1,7 +1,6 @@
 
 import os
 import json
-from decouple import config
 
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow

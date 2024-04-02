@@ -9,8 +9,9 @@ import json
 from ingresso_generator import overlay_code_on_image, generate_ingresso_code
 from email_sender import send_email
 from google_sheets import read_google_sheets, authorize_google_sheets
-from decouple import Config, Csv, RepositoryEnv
+# from decouple import Config, Csv, RepositoryEnv
 from dotenv import load_dotenv
+from cloud_storage_functions import guardar_en_gcs, leer_desde_gcs
 
 load_dotenv()
 
@@ -35,33 +36,46 @@ EMAIL_PASSWORD = os.getenv('EMAIL_PASSWORD')
 DEFAULT_CONTADORES = {'SOCIAL': 0, 'INTEIRA': 0, 'MEIA': 0}
 
 def read_last_processed_row(file_path):
-    # Lê o número da última linha processada a partir do arquivo de configuração.
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-            return data.get('last_processed_row', 0)
-    else:
+    datos = leer_desde_gcs(file_path)
+    if not datos:
         return 0
+    return datos
+    # Lê o número da última linha processada a partir do arquivo de configuração.
+    #if os.path.exists(file_path):
+    #    with open(file_path, 'r') as file:
+    #        data = json.load(file)
+    #        return data.get('last_processed_row', 0)
+    #else:
+    #    return 0
 
 def update_last_processed_row(last_row, file_path):
     # Atualiza o número da última linha processada no arquivo de configuração.
     data = {'last_processed_row': last_row}
-    with open(file_path, 'w') as file:
-        json.dump(data, file)
+    guardar_en_gcs(data, file_path)
+    
+    #with open(file_path, 'w') as file:
+    #    json.dump(data, file)
 
 def read_contadores(file_path, default_contadores):
     # Lê os contadores a partir do arquivo ou utiliza o padrão se o arquivo não existir.
-    if os.path.exists(file_path):
-        with open(file_path, 'r') as file:
-            data = json.load(file)
-            return data
-    else:
+    datos = leer_desde_gcs(file_path)
+    if not datos:
         return default_contadores
+    return datos
+    
+    #if os.path.exists(file_path):
+    #    with open(file_path, 'r') as file:
+    #        data = json.load(file)
+    #        return data
+    #else:
+    #    return default_contadores
 
 def save_contadores(contadores, file_path):
     # Salva os contadores no arquivo.
-    with open(file_path, 'w') as file:
-        json.dump(contadores, file)
+    
+    guardar_en_gcs(contadores, file_path)
+    #with open(file_path, 'w') as file:
+    #    json.dump(contadores, file)
 
 def main():
     # Inicializa as credenciais e o serviço do Google Sheets.
@@ -71,11 +85,13 @@ def main():
     range_name = f'{SHEET_NAME}!B:E'
 
     # Lê o número da última linha processada a partir do arquivo de configuração.
-    last_processed_row_file = './data/last_processed_row.json'
+    #last_processed_row_file = './data/last_processed_row.json'
+    last_processed_row_file = 'gs://data_pdm/last_processed_row.json'
     last_processed_row = read_last_processed_row(last_processed_row_file)
 
     # Lê os contadores a partir do arquivo ou utiliza o padrão se o arquivo não existir.
-    contadores_file = './data/contadores.json'
+    #contadores_file = './data/contadores.json'
+    contadores_file = 'gs://data_pdm/contadores.json'
     contadores = read_contadores(contadores_file, DEFAULT_CONTADORES)
 
     # Lê os dados do Google Sheets.
