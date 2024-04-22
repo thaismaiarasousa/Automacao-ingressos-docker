@@ -39,7 +39,7 @@ def read_last_processed_row(file_path):
     datos = leer_desde_gcs(file_path)
     if not datos:
         return 0
-    return datos
+    return datos.get("last_processed_row",0)
     # Lê o número da última linha processada a partir do arquivo de configuração.
     #if os.path.exists(file_path):
     #    with open(file_path, 'r') as file:
