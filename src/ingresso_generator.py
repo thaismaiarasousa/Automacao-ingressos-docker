@@ -40,7 +40,7 @@ def overlay_code_on_image(ingresso_code):
 
     # Escolhe a fonte (substitua 'caminho_da_fonte' pela fonte real).
     font_size = 35  # Tamanho da fonte (ajuste conforme necessário)
-    font = ImageFont.truetype("arial.ttf", font_size)
+    font = ImageFont.truetype("./images/arial.ttf", font_size)
 
     # Escolhe a posição onde o código será sobreposto (ajuste conforme necessário).
     position = (130, 50)
