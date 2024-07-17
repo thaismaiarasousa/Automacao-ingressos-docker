@@ -133,7 +133,7 @@ def main():
                     email_password=EMAIL_PASSWORD
                 )
 
-                save_contadores(contadores, contadores_file)
+                #save_contadores(contadores, contadores_file)
             else:
                 print(f"Linha ignorada. Índice da Linha: {last_row}, Valores da Linha: {row_values}")
     else:
